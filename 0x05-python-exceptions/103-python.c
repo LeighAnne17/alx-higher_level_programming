@@ -1,4 +1,10 @@
-#include <Python.h>
+#!/usr/bin/python3
+
+int main(void)
+{
+	return (0);
+}
+
 
 /**
  * print_python_bytes - Prints information about Python bytes objects
