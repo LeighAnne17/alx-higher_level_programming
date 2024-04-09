@@ -1,2 +1,2 @@
-1 int object
+1
 
