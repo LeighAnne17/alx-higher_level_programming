@@ -1,19 +1,19 @@
 #!/usr/bin/python3
+"""
+Contains the class MyInt
+"""
+
 
 class MyInt(int):
-    """
-    A class representing a rebel integer.
-    """
+    """rebel version of an integer, perfect for opposite day!"""
+    def __new__(cls, *args, **kwargs):
+        """create a new instance of the class"""
+        return super(MyInt, cls).__new__(cls, *args, **kwargs)
 
     def __eq__(self, other):
-        """
-        Override the == operator to return the inverted result.
-        """
-        return super().__ne__(other)
+        """what was != is now =="""
+        return int(self) != other
 
     def __ne__(self, other):
-        """
-        Override the != operator to return the inverted result.
-        """
-        return super().__eq__(other)
-
+        """what was == is now !="""
+        return int(self) == other
