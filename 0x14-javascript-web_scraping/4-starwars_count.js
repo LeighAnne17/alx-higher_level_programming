@@ -1,20 +1,27 @@
 #!/usr/bin/node
-// Script that prints the title of a Star Wars movie where the episode number matches a given integer
-let request = require('request');
-let url = process.argv[2];
-let count = 0;
-request.get(url, function (err, response, body) {
-  if (err) {
-    return console.log(err);
-  } else if (response.statusCode === 200) {
-    let films = JSON.parse(body).results;
-    for (let film of films) {
-      for (let character of film.characters) {
-        if (character.includes('/18/')) {
-          count += 1;
-        }
-      }
+
+const request = require('request');
+const apiUrl = process.argv[2]; // API URL from the command line argument
+const wedgeAntillesId = 18;    // Character ID for Wedge Antilles
+
+request.get(apiUrl, (err, response, body) => {
+    if (err) {
+        console.error(err);
+        return;
     }
-    console.log(count);
-  }
+
+    try {
+        const data = JSON.parse(body);
+        let count = 0;
+        
+        data.results.forEach(movie => {
+            if (movie.characters.some(characterUrl => characterUrl.endsWith(`/${wedgeAntillesId}/`))) {
+                count++;
+            }
+        });
+        
+        console.log(count);
+    } catch (parseError) {
+        console.error('Error parsing JSON:', parseError);
+    }
 });
