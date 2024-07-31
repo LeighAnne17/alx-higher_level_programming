@@ -1,21 +1,32 @@
 #!/usr/bin/node
-// Script that computes the number of tasks completed by user id
-let request = require('request');
-request.get(process.argv[2], function (err, response, body) {
-  if (err) {
-    return console.log(err);
-  } else if (response.statusCode === 200) {
-    let tasks = JSON.parse(body);
-    let done = {};
-    for (let task of tasks) {
-      if (task.completed === true) {
-        if (task.userId in done) {
-          done[task.userId] += 1;
-        } else {
-          done[task.userId] = 1;
-        }
-      }
+// Script that computes the number of tasks completed by user
+
+const request = require('request');
+
+const apiUrl = process.argv[2]; // API URL from the command line argument
+
+request.get(apiUrl, (err, response, body) => {
+    if (err) {
+        console.error(err);
+        return;
     }
-    console.log(done);
-  }
+
+    try {
+        const tasks = JSON.parse(body);
+        const userTasks = {};
+
+        tasks.forEach(task => {
+            if (task.completed) {
+                if (userTasks[task.userId]) {
+                    userTasks[task.userId]++;
+                } else {
+                    userTasks[task.userId] = 1;
+                }
+            }
+        });
+
+        console.log(userTasks);
+    } catch (parseError) {
+        console.error('Error parsing JSON:', parseError);
+    }
 });
